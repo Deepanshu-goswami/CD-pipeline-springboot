@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-pod-deploy
+  template:
+    metadata:
+      name: my-pod
+      labels:
+        app: my-pod-deploy
+    spec:
+      containers:
+        - name: my-container
+          image: https://hub.docker.com/repository/docker/51983334/maven-build-repo:latest
+          ports:
+            - containerPort: 8080
+
+--- # Services
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: deployment-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-pod-deploy
+  ports:
+    - port: 8080
+      targetPort: 8080
+
+    
+    
