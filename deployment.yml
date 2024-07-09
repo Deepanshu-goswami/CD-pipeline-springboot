@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: my-container
-          image: https://hub.docker.com/repository/docker/51983334/maven-build-repo:latest
+          image: 51983334/maven-build-repo:latest
           ports:
             - containerPort: 8080
 
