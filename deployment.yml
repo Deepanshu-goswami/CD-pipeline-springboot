@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: my-container
-          image: 51983334/maven-build-repo:latest
+          image: asia-south2-docker.pkg.dev/vishwas-426408/jenkins-repo/java-application-new:latest
           ports:
             - containerPort: 8080
 
