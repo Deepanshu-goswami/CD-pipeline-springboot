@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: "java-application-new-1"
-        image: "asia-south2-docker.pkg.dev/vishwas-426408/jenkins-repo/java-application-new:76"
+        image: "asia-south2-docker.pkg.dev/vishwas-426408/jenkins-repo//${Image_name}"
         ports:
             - containerPort: 8080
       - name: "nginx-2"
