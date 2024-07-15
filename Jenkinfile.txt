@@ -3,6 +3,7 @@ pipeline{
     parameters {
         string(name: 'IMAGE_NAME')
         string(name: 'NAMESPACE')
+        string(name: 'Tags')
     }
     environment {
         GCLOUD_PROJECT = 'vishwas-426408'
@@ -28,14 +29,22 @@ pipeline{
                 }
             }
         }
-        stage('Validate Image Existence in Artifact Registry') {
-           steps {
+        stage('Validate Docker Image') {
+            steps {
                 script {
-                    def result = sh(returnStdout: true, script: "gcloud artifacts docker images list ${params.IMAGE_NAME} --include-tags")
+                    def projectName = 'vishwas-426408'
+                    def location = 'asia-south2'
+                    def repository = 'jenkins-repo'
+                    def packageName = 'java-application-new'
+                    def tag = '6'
+
+                    def cmd = "gcloud artifacts files list --project=${projectName} --location=${location} --repository=${repository} --package=${packageName} --tag=${tag}"
+                    def result = sh(returnStdout: true, script: cmd)
+
                     if (result.trim() != "") {
-                        echo "Image ${params.IMAGE_NAME} exists in Artifact Registry!"
+                        echo "Docker image ${packageName}:${tag} exists in Artifact Registry"
                     } else {
-                        error "Image ${params.IMAGE_NAME} does not exist in Artifact Registry. Aborting deployment."
+                        error "Docker image ${packageName}:${tag} does not exist in Artifact Registry"
                     }
                 }
             }
@@ -48,9 +57,8 @@ pipeline{
                 gcloud config set compute/zone $CLUSTER_ZONE
                 gcloud container clusters get-credentials $CLUSTER_NAME
                 '''
-            }
                        }
-
+            }
         }
         stage('Namespace Creation if Not Exists') {
             steps {
@@ -65,12 +73,10 @@ pipeline{
                 }
             }
         }
-        stage("Deployment to GKE Cluster"){
-            steps{
+        stage("Deployment to GKE Cluster"){steps{
                 sh 'kubectl apply -f deployment.yml -f ingress.yaml -n ${NAMESPACE}'
-            }
+            } }
     }
-}
     post {
         success {
             echo 'Pipeline succeeded!!'
@@ -85,4 +91,4 @@ pipeline{
                  body: "Oops! The pipeline ${env.BUILD_URL} has failed. Check the logs for details.Try Again"
         }
     }
-}
+        }
