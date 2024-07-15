@@ -1,25 +1,25 @@
 apiVersion: "apps/v1"
 kind: "Deployment"
 metadata:
-  name: "nginx-1"
+  name: "nginx-2"
   labels:
-    app: "nginx-1"
+    app: "nginx-2"
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: "nginx-1"
+      app: "nginx-2"
   template:
     metadata:
       labels:
-        app: "nginx-1"
+        app: "nginx-2"
     spec:
       containers:
       - name: "java-application-new-1"
-        image: "asia-south2-docker.pkg.dev/vishwas-426408/jenkins-repo/java-application-new:76"
+        #image: "asia-south2-docker.pkg.dev/vishwas-426408/jenkins-repo/java-application-new:76"
         ports:
             - containerPort: 8080
-      - name: "nginx-2"
+      - name: "nginx-3"
         image: "nginx:latest"
         
 --- # Services
